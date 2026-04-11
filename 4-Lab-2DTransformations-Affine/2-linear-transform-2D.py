@@ -132,7 +132,7 @@ def main():
 
         # # nonuniform scaling
         # M = np.array([[2., 0.],
-                      # [0., 1.]])
+        #               [0., 1.]])
 
         # # reflection
         # M = np.array([[-1., 0],
@@ -140,12 +140,12 @@ def main():
 
         # # shearing in x
         # M = np.array([[1., 2.],
-                      # [0., 1.]])
+        #               [0., 1.]])
 
         # # rotation
         # th = np.radians(30)
         # M = np.array([[np.cos(th), -np.sin(th)],
-                      # [np.sin(th),  np.cos(th)]])
+        #               [np.sin(th),  np.cos(th)]])
 
         # print(M)
 

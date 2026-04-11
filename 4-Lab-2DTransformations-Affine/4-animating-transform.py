@@ -165,10 +165,10 @@ def main():
                       [0., 1., .2],
                       [0., 0., 1.]])
 
-        M = R
+        # M = R
         # M = T
         # M = R @ T   # '@' is matrix-matrix / matrix-vector multiplication operator
-        # M = T @ R
+        M = T @ R
 
         # print(M)
             

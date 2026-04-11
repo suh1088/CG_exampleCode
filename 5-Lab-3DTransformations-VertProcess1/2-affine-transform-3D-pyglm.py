@@ -208,11 +208,11 @@ def main():
         # scaling
         S = glm.scale(glm.vec3(np.sin(t), np.sin(t), np.sin(t)))
 
-        M = R
+        # M = R
         # M = T
         # M = S
         # M = R @ T
-        # M = T @ R
+        M = T @ R
 
         # current frame: M
         glUniformMatrix4fv(loc_M, 1, GL_FALSE, glm.value_ptr(M))

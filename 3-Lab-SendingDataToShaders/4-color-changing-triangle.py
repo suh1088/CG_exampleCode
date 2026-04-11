@@ -130,8 +130,10 @@ def main():
 
         # update uniforms
         t = glfwGetTime()
-        blue = (glm.sin(t) + 1) * .5
-        glUniform3f(loc_u_color, 0, 0, blue)
+        blue = (glm.sin(t * 3.14159265) + 1) * .5
+        green = (glm.sin(t * 2.7182818) + 1) * .5
+        red = (glm.sin(t * 1.414213) + 1) * .5
+        glUniform3f(loc_u_color, red, green, blue)
 
         glBindVertexArray(VAO)
         glDrawArrays(GL_TRIANGLES, 0, 3)

@@ -7,6 +7,11 @@ import numpy as np
 g_cam_ang = 0.
 g_cam_height = .1
 
+obj_spin = 0
+
+obj_trans_x = 0
+obj_trans_y = 0
+
 g_vertex_shader_src = '''
 #version 330 core
 
@@ -86,7 +91,7 @@ def load_shaders(vertex_shader_source, fragment_shader_source):
 
 
 def key_callback(window, key, scancode, action, mods):
-    global g_cam_ang, g_cam_height
+    global g_cam_ang, g_cam_height, obj_spin, obj_trans_x, obj_trans_y
     if key==GLFW_KEY_ESCAPE and action==GLFW_PRESS:
         glfwSetWindowShouldClose(window, GLFW_TRUE);
     else:
@@ -99,6 +104,22 @@ def key_callback(window, key, scancode, action, mods):
                 g_cam_height += .1
             elif key==GLFW_KEY_W:
                 g_cam_height += -.1
+                
+            elif key==GLFW_KEY_K:
+                obj_spin += -.1
+            elif key==GLFW_KEY_L:
+                obj_spin += .1
+
+            elif key==GLFW_KEY_A:
+                obj_trans_x += -.1
+            elif key==GLFW_KEY_S:
+                obj_trans_x += .1
+
+            elif key==GLFW_KEY_D:
+                obj_trans_y += -.1
+            elif key==GLFW_KEY_F:
+                obj_trans_y += .1
+
 
 def prepare_vao_triangle():
     # prepare vertex data (in main memory)
@@ -174,7 +195,7 @@ def main():
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE) # for macOS
 
     # create a window and OpenGL context
-    window = glfwCreateWindow(800, 800, '3-lookat', None, None)
+    window = glfwCreateWindow(1600, 1600, '3-lookat', None, None)
     if not window:
         glfwTerminate()
         return
@@ -207,9 +228,12 @@ def main():
         # use orthogonal projection (we'll see details later)
         P = glm.ortho(-1,1,-1,1,-1,1)
 
+        t = glfwGetTime()
+        th = np.radians(t*90)
+
         # view matrix
         # rotate camera position with g_cam_ang / move camera up & down with g_cam_height
-        V = glm.lookAt(glm.vec3(.1*np.sin(g_cam_ang),g_cam_height,.1*np.cos(g_cam_ang)), glm.vec3(0,0,0), glm.vec3(0,1,0))
+        V = glm.lookAt(glm.vec3(.1*np.sin(th),g_cam_height,.1*np.cos(th)), glm.vec3(0,0,0), glm.vec3(0,1,0))
 
         # current frame: P*V*I (now this is the world frame)
         I = glm.mat4()
@@ -222,23 +246,23 @@ def main():
 
 
         # animating
-        t = glfwGetTime()
+        # t = glfwGetTime()
 
         # rotation
-        th = np.radians(t*90)
-        R = glm.rotate(th, glm.vec3(0,0,1))
+        spin = np.radians(obj_spin*90)
+        R = glm.rotate(spin, glm.vec3(0,0,1))
 
         # tranlation
-        T = glm.translate(glm.vec3(np.sin(t), .2, 0.))
+        T = glm.translate(glm.vec3(obj_trans_x, obj_trans_y, 0.))
 
         # scaling
         S = glm.scale(glm.vec3(np.sin(t), np.sin(t), np.sin(t)))
 
-        M = R
+        # M = R
         # M = T
         # M = S
         # M = R @ T
-        # M = T @ R
+        M = T @ R
 
         # current frame: P*V*M
         MVP = P*V*M

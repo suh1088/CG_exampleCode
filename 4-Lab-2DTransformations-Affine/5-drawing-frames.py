@@ -205,19 +205,49 @@ def main():
 
         # rotation 30 deg
         th = np.radians(t*90)
-        R = np.array([[np.cos(th), -np.sin(th), 0.],
+        R1 = np.array([[np.cos(th), -np.sin(th), 0.],
                       [np.sin(th),  np.cos(th), 0.],
                       [0.,         0.,          1.]])
-
+        
         # tranlation by (.5, .2)
-        T = np.array([[1., 0., np.sin(t)],
-                      [0., 1., .2],
+        T1 = np.array([[1., 0., np.sin(t)],
+                      [0., 1., 0],
                       [0., 0., 1.]])
 
-        M = R
+        # tranlation by (.5, .2)
+        T3 = np.array([[1., 0., .8],
+                      [0., 1., 0],
+                      [0., 0., 1.]])
+        
+        th = np.radians(t*30)
+        Ra = np.array([[np.cos(th), -np.sin(th), 0.],
+                      [np.sin(th),  np.cos(th), 0.],
+                      [0.,         0.,          1.]])
+        
+
+        # M = R
         # M = T
-        # M = R @ T   # '@' is matrix-matrix / matrix-vector multiplication operator
-        # M = T @ R
+        # M = R @ T1   # '@' is matrix-matrix / matrix-vector multiplication operator
+        M = T1 @ R1
+
+        # print(M)
+
+            
+        # current frame: M
+        glUniformMatrix3fv(loc_M, 1, GL_TRUE, M)
+
+        # draw triangle w.r.t. the current frame
+        glBindVertexArray(vao_triangle)
+        glDrawArrays(GL_TRIANGLES, 0, 3)
+
+        # draw current frame
+        glBindVertexArray(vao_frame)
+        glDrawArrays(GL_LINES, 0, 6)
+
+        # M = R
+        # M = T
+        # M = R @ T2   # '@' is matrix-matrix / matrix-vector multiplication operator
+        M = Ra @ T3 @ R1
 
         # print(M)
 
